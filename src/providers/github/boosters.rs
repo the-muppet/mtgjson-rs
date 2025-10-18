@@ -1,4 +1,5 @@
-use serde_json::{Value, Map};
+use serde_json::Value;
+use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::OnceCell;
 
@@ -6,7 +7,7 @@ use super::{AbstractProvider, BaseProvider, MtgjsonConfig, ProviderError, Result
 
 pub struct GitHubBoostersProvider {
     provider: Arc<BaseProvider>,
-    booster_data: OnceCell<Map<String, Value>>,
+    booster_data: OnceCell<HashMap<String, Value>>,
 }
 
 impl GitHubBoostersProvider {

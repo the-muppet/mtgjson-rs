@@ -87,7 +87,7 @@ impl TCGPlayerProvider {
             })?;
 
         // Convert Vec<Value> to PyObject
-        let py_list = pyo3::types::PyList::new(py, Vec::<PyObject>::new());
+        let py_list = pyo3::types::PyList::new_bound(py, Vec::<PyObject>::new());
         for value in result {
             let json_str = serde_json::to_string(&value).map_err(|e| {
                 PyErr::new::<pyo3::exceptions::PyValueError, _>(format!(
@@ -95,11 +95,11 @@ impl TCGPlayerProvider {
                     e
                 ))
             })?;
-            let json_module = pyo3::types::PyModule::import(py, "json")?;
+            let json_module = pyo3::types::PyModule::import_bound(py, "json")?;
             let py_dict = json_module.call_method1("loads", (json_str,))?;
-            py_list?.append(py_dict)?;
+            py_list.append(py_dict)?;
         }
-        Ok(py_list?.into_py(py))
+        Ok(py_list.into_py(py))
     }
 }
 
