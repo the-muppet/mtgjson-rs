@@ -1,0 +1,95 @@
+Date : 2025-10-07 10:30:22
+Directory : c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src
+Total : 60 files,  13895 codes, 1003 comments, 2458 blanks, all 17356 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Rust     |         60 |     13,895 |      1,003 |      2,458 |     17,356 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                           | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                              |         60 |     13,895 |      1,003 |      2,458 |     17,356 |
+| . (Files)                                                                                      |          4 |        384 |         32 |         37 |        453 |
+| builders                                                                                       |          6 |      2,783 |        332 |        523 |      3,638 |
+| classes                                                                                        |         18 |      6,398 |        344 |      1,202 |      7,944 |
+| compiled_classes                                                                               |         11 |      1,221 |        103 |        198 |      1,522 |
+| providers                                                                                      |         21 |      3,109 |        192 |        498 |      3,799 |
+| providers (Files)                                                                              |          2 |        247 |         29 |         42 |        318 |
+| providers\cardmarket                                                                           |          2 |        547 |         47 |         88 |        682 |
+| providers\edhrec                                                                               |          2 |         71 |          0 |         12 |         83 |
+| providers\mtgwiki                                                                              |          2 |         70 |          2 |         13 |         85 |
+| providers\scryfall                                                                             |          4 |        642 |         37 |        107 |        786 |
+| providers\third_party                                                                          |          9 |      1,532 |         77 |        236 |      1,845 |
++------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                       | language | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\builders\mod.rs                            | Rust     |         22 |          2 |          5 |         29 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\builders\output_generator.rs               | Rust     |        718 |         53 |        154 |        925 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\builders\parallel_call.rs                  | Rust     |        498 |         61 |         66 |        625 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\builders\price_builder.rs                  | Rust     |        118 |         33 |         19 |        170 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\builders\set_builder.rs                    | Rust     |      1,249 |        152 |        252 |      1,653 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\builders\set_builder_functions.rs          | Rust     |        178 |         31 |         27 |        236 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\base.rs                            | Rust     |         70 |         10 |         13 |         93 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\card.rs                            | Rust     |      1,115 |         54 |        231 |      1,400 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\deck.rs                            | Rust     |        882 |         53 |        193 |      1,128 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\foreign_data.rs                    | Rust     |        353 |         15 |         71 |        439 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\game_formats.rs                    | Rust     |         69 |          3 |         15 |         87 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\identifiers.rs                     | Rust     |        794 |         33 |        113 |        940 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\leadership_skills.rs               | Rust     |         46 |          4 |         11 |         61 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\legalities.rs                      | Rust     |        103 |          6 |         24 |        133 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\meta.rs                            | Rust     |         46 |          7 |         11 |         64 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\mod.rs                             | Rust     |         34 |          0 |          2 |         36 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\prices.rs                          | Rust     |        814 |         25 |        110 |        949 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\purchase_urls.rs                   | Rust     |        119 |          5 |         17 |        141 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\related_cards.rs                   | Rust     |         77 |          9 |         15 |        101 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\rulings.rs                         | Rust     |         41 |          5 |          9 |         55 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\sealed_product.rs                  | Rust     |        669 |         45 |         93 |        807 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\set.rs                             | Rust     |        919 |         58 |        236 |      1,213 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\translations.rs                    | Rust     |        181 |          6 |         24 |        211 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\classes\utils.rs                           | Rust     |         66 |          6 |         14 |         86 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\compiled_classes.rs                        | Rust     |         22 |          2 |          2 |         26 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\compiled_classes\all_identifiers.rs        | Rust     |        240 |         21 |         45 |        306 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\compiled_classes\all_printings.rs          | Rust     |        169 |         25 |         34 |        228 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\compiled_classes\atomic_cards.rs           | Rust     |         26 |          1 |          5 |         32 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\compiled_classes\card_types.rs             | Rust     |         25 |          1 |          5 |         31 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\compiled_classes\compiled_list.rs          | Rust     |         93 |          9 |         20 |        122 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\compiled_classes\deck_list.rs              | Rust     |        167 |         17 |         31 |        215 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\compiled_classes\enum_values.rs            | Rust     |         25 |          1 |          5 |         31 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\compiled_classes\keywords.rs               | Rust     |        273 |         16 |         31 |        320 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\compiled_classes\set_list.rs               | Rust     |         25 |          1 |          5 |         31 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\compiled_classes\structures.rs             | Rust     |        152 |         10 |         12 |        174 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\compiled_classes\tcgplayer_skus.rs         | Rust     |         26 |          1 |          5 |         32 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\constants.rs                               | Rust     |        165 |          1 |          3 |        169 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\lib.rs                                     | Rust     |        134 |         19 |         18 |        171 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\cardmarket\mod.rs                | Rust     |          2 |          0 |          2 |          4 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\cardmarket\monolith.rs           | Rust     |        545 |         47 |         86 |        678 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\edhrec\card_ranks.rs             | Rust     |         69 |          0 |         10 |         79 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\edhrec\mod.rs                    | Rust     |          2 |          0 |          2 |          4 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\mod.rs                           | Rust     |         81 |         10 |         11 |        102 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\mtgwiki\mod.rs                   | Rust     |          2 |          0 |          2 |          4 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\mtgwiki\secret_lair.rs           | Rust     |         68 |          2 |         11 |         81 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\provider_base.rs                 | Rust     |        166 |         19 |         31 |        216 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\scryfall\mod.rs                  | Rust     |          6 |          0 |          2 |          8 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\scryfall\monolith.rs             | Rust     |        402 |         23 |         61 |        486 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\scryfall\orientation_detector.rs | Rust     |        130 |          3 |         23 |        156 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\scryfall\sf_utils.rs             | Rust     |        104 |         11 |         21 |        136 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\third_party\cardhoarder.rs       | Rust     |        146 |          7 |         19 |        172 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\third_party\cardkingdom.rs       | Rust     |        293 |         14 |         37 |        344 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\third_party\gatherer.rs          | Rust     |        195 |         14 |         32 |        241 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\third_party\mod.rs               | Rust     |         16 |          2 |          2 |         20 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\third_party\mtgban.rs            | Rust     |         69 |          0 |         10 |         79 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\third_party\multiverse_bridge.rs | Rust     |         68 |          2 |         11 |         81 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\third_party\tcgplayer.rs         | Rust     |        217 |          6 |         32 |        255 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\third_party\whats_in_standard.rs | Rust     |        400 |         24 |         71 |        495 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\providers\third_party\wizards.rs           | Rust     |        128 |          8 |         22 |        158 |
+| c:\Users\rprat\projects\mtgjson-v5\mtgjson-rust\src\utils_functions.rs                         | Rust     |         63 |         10 |         14 |         87 |
+| Total                                                                                          |          |     13,895 |      1,003 |      2,458 |     17,356 |
++------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

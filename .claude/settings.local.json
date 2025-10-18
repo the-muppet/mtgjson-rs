@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/rprat/projects/mtgjson-v5/mtgjson5/compiled_classes/**)",
+      "Read(//c/Users/rprat/projects/mtgjson-v5/mtgjson5/providers/**)",
+      "Read(//c/Users/rprat/projects/mtgjson-v5/mtgjson5/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

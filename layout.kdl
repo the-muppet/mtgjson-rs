@@ -1,0 +1,126 @@
+// Zellij layout for Daedalus multi-agent development
+// Launch with: zellij --layout zellij-layout.kdl attach -c daedalus-debt
+
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+
+    tab name="WS1-Github" focus=true {
+        pane {
+            name "Github Module"
+            command "git checkout feature/github-module && claude"
+            args "-c" "echo '# Workstream 1: Core Stability & Error Handling'; echo '# Focus: Eliminate unwraps, implement error handling'; echo '# Target files: backend/claudemon/src/daemon/*.rs'; echo ''; echo 'Agent ready for WS1 tasks'; exec bash"
+        }
+    }
+
+    tab name="WS2-Features" {
+        pane {
+            name "Feature Completion & Integration"
+            command "git checkout feature/pyo3-migration && claude"
+            args "-c" "echo '# Workstream 2: Feature Completion & Integration'; echo '# Focus: Complete Git integration, fix plugin system'; echo '# Target: backend/claudemon/src/git/, integration/plugins/'; echo ''; echo 'Agent ready for WS2 tasks'; exec bash"
+        }
+    }
+
+    tab name="WS3-Testing" {
+        pane {
+            name "Testing & Quality Infrastructure"
+            command "git checkout feature/type-fixes && claude"
+            args "-c" "echo '# Workstream 3: Testing & Quality Infrastructure'; echo '# Focus: Achieve 80% test coverage'; echo '# Target: tests/, create new test files'; echo ''; echo 'Agent ready for WS3 tasks'; exec bash"
+        }
+    }
+
+    tab name="WS4-Performance" {
+        pane {
+            name "Performance & Production Readiness"
+            command "git checkout feature/lifetime-fixes && claude"
+            args "-c" "echo '# Workstream 4: Performance & Production Readiness'; echo '# Focus: Optimize performance, prepare deployment'; echo '# Target: Memory optimization, remove clones'; echo ''; echo 'Agent ready for WS4 tasks'; exec bash"
+        }
+    }
+
+    tab name="Coordination" {
+        pane split_direction="vertical" {
+            pane size="70%" {
+                name "Dashboard"
+                command "bash"
+                args "-c" "echo 'Starting coordination dashboard...'; sleep 1; ./coordination/coordination-dashboard.sh 2>/dev/null || (echo 'Dashboard not found. Run from project root.'; exec bash)"
+            }
+            pane size="30%" split_direction="horizontal" {
+                pane {
+                    name "Metrics"
+                    command "watch"
+                    args "-n" "30" "echo 'Technical Debt Metrics:'; echo ''; rg '\\.unwrap\\(\\)' --type rust 2>/dev/null | wc -l | xargs echo 'Unwraps:'; rg 'TODO|FIXME' --type rust 2>/dev/null | wc -l | xargs echo 'TODOs:'; rg '\\.clone\\(\\)' --type rust 2>/dev/null | wc -l | xargs echo 'Clones:'"
+                }
+                pane {
+                    name "Git Status"
+                    command "watch"
+                    args "-n" "5" "git status --short; echo ''; git branch --show-current | xargs echo 'Branch:'"
+                }
+            }
+        }
+    }
+
+    tab name="Monitor" {
+        pane split_direction="vertical" {
+            pane size="50%" {
+                name "Build Status"
+                command "bash"
+                args "-c" "echo 'Monitoring build status...'; while true; do cargo check 2>&1 | tail -20; sleep 30; done"
+            }
+            pane size="50%" split_direction="horizontal" {
+                pane {
+                    name "Test Status"
+                    command "bash"
+                    args "-c" "echo 'Monitoring test status...'; while true; do cargo test --quiet 2>&1 | grep -E 'test result:|running' | tail -10; sleep 60; done"
+                }
+                pane {
+                    name "File Changes"
+                    command "watch"
+                    args "-n" "2" "find . -name '*.rs' -mmin -5 2>/dev/null | grep -v target | head -20"
+                }
+            }
+        }
+    }
+
+    tab name="Commands" {
+        pane {
+            name "Quick Commands"
+            command "bash"
+            args "-c" "cat << 'EOF'
+Quick Commands Reference:
+========================
+
+Sync Status:
+  ./coordination/tools/sync-status.sh
+
+Update Progress:
+  ./coordination/tools/update-status.sh
+
+Report Blocker:
+  ./coordination/tools/report-blocker.sh
+
+Check Metrics:
+  rg '\\.unwrap\\(\\)' --type rust | wc -l
+  rg 'TODO|FIXME' --type rust | wc -l
+
+Fix Warnings:
+  cargo clippy --fix --allow-dirty --allow-staged
+
+Run Tests:
+  cargo test
+  cargo test --workspace
+
+Coverage:
+  cargo tarpaulin --out Html
+
+EOF
+exec bash"
+        }
+    }
+}

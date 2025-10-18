@@ -1,0 +1,277 @@
+// Zellij layout for MTGJSON Rust Parallelization
+// Launch with: zellij --layout layout2.kdl attach -c mtgjson-parallel
+// Purpose: Coordinate parallel development to fix 31 compilation errors
+
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+
+    tab name="WS1-GitHub" focus=true {
+        pane {
+            name "GitHub Module Implementation"
+            command "git checkout feature/github-module && claude"
+            args "-p" "echo '===================================='; echo '# Workstream 1: GitHub Module Implementation'; echo '===================================='; echo ''; echo 'Branch: feature/github-module'; echo 'Effort: 8 hours'; echo ''; echo 'Files to create:'; echo '  - src/providers/github/mod.rs'; echo '  - src/providers/github/boosters.rs'; echo '  - src/providers/github/decks.rs'; echo '  - src/providers/github/sealed.rs'; echo '  - src/providers/github/card_sealed_products.rs'; echo '  - src/providers/github/mtgsqlite.rs'; echo ''; echo 'Template: Follow EdhrecProviderCardRanks pattern'; echo ''; echo 'No conflicts expected - completely isolated work'; echo ''; git checkout feature/github-module 2>/dev/null || echo 'Run: git checkout -b feature/github-module'; echo ''; echo 'Agent ready for WS1 tasks'; exec bash"
+        }
+    }
+
+    tab name="WS2-PyO3" {
+        pane {
+            name "PyO3 v0.22 API Migration"
+            command "git checkout feature/pyo3-migration && claude"
+            args "-p" "echo '===================================='; echo '# Workstream 2: PyO3 API Migration'; echo '===================================='; echo ''; echo 'Branch: feature/pyo3-migration'; echo 'Effort: 12 hours'; echo ''; echo 'API Changes Required:'; echo '  PyList::new → PyList::new_bound'; echo '  PyDict::new → PyDict::new_bound'; echo '  PySet::empty → PySet::new_bound'; echo '  PyModule::import → PyModule::import_bound'; echo '  CString::new() → CString::new(\"\")'; echo '  py.run() → PyModule::from_code_bound'; echo ''; echo 'Files to update (20+):'; echo '  - src/providers/third_party/*.rs'; echo '  - src/providers/cardmarket/monolith.rs'; echo '  - src/providers/scryfall/monolith.rs'; echo '  - src/classes/card.rs'; echo '  - src/builders/price_builder.rs'; echo ''; echo 'Conflicts possible: parallel_call.rs, foreign_data.rs'; echo ''; git checkout feature/pyo3-migration 2>/dev/null || echo 'Run: git checkout -b feature/pyo3-migration'; echo ''; echo 'Agent ready for WS2 tasks'; exec bash"
+        }
+    }
+
+    tab name="WS3-Types" {
+        pane {
+            name "Type & Method Signature Fixes"
+            command "git checkout feature/type-fixes && claude"
+            args "-p" "echo '===================================='; echo '# Workstream 3: Type & Method Fixes'; echo '===================================='; echo ''; echo 'Branch: feature/type-fixes'; echo 'Effort: 6 hours'; echo ''; echo 'Key Fixes:'; echo '  - download_all_pages() - add py, url, params args'; echo '  - download_cards() - add py, set_code args'; echo '  - Fix type annotations in parallel_call.rs'; echo ''; echo 'Target Files:'; echo '  - src/builders/set_builder.rs (lines 172, 1522)'; echo '  - src/builders/parallel_call.rs'; echo ''; echo 'Example fix:'; echo '  BEFORE: provider.download_all_pages()?'; echo '  AFTER:  provider.download_all_pages(py, url, Some(params))?'; echo ''; echo 'Conflicts possible: parallel_call.rs (with WS2)'; echo ''; git checkout feature/type-fixes 2>/dev/null || echo 'Run: git checkout -b feature/type-fixes'; echo ''; echo 'Agent ready for WS3 tasks'; exec bash"
+        }
+    }
+
+    tab name="WS4-Lifetimes" {
+        pane {
+            name "Lifetime & Memory Safety Fixes"
+            command "git checkout feature/lifetime-fixes && claude"
+            args "-p" "echo '===================================='; echo '# Workstream 4: Lifetime Fixes'; echo '===================================='; echo ''; echo 'Branch: feature/lifetime-fixes'; echo 'Effort: 4 hours'; echo ''; echo 'Focus: Fix Bound<_, PyDict> lifetimes'; echo ''; echo 'Target File:'; echo '  - src/classes/foreign_data.rs'; echo ''; echo 'Issues to fix:'; echo '  - to_dict() lifetime annotations'; echo '  - to_dict_bound() implementation'; echo '  - PyDict operations using new_bound'; echo ''; echo 'Conflicts possible: foreign_data.rs (with WS2)'; echo ''; git checkout feature/lifetime-fixes 2>/dev/null || echo 'Run: git checkout -b feature/lifetime-fixes'; echo ''; echo 'Agent ready for WS4 tasks'; exec bash"
+        }
+    }
+
+    tab name="WS5-API" {
+        pane {
+            name "High-Level Python API (Post-Compilation)"
+            command "bash"
+            args "-p" "echo '===================================='; echo '# Workstream 5: High-Level API'; echo '===================================='; echo ''; echo 'Branch: feature/high-level-api'; echo 'Effort: 8 hours'; echo ''; echo '⚠️  BLOCKED: Must wait for WS1-4 completion'; echo ''; echo 'Functions to add to src/lib.rs:'; echo '  - build_single_set(set_code, include_extras)'; echo '  - build_multiple_sets(set_codes)'; echo '  - build_all_sets()'; echo '  - build_prices_only(set_code)'; echo '  - write_set_to_file(set_data, path)'; echo '  - generate_compiled_outputs()'; echo '  - generate_file_hashes()'; echo ''; echo 'Requirements:'; echo '  ✅ Compilation must succeed first'; echo '  ✅ All PyO3 bindings working'; echo '  ✅ Integration tests passing'; echo ''; git checkout feature/high-level-api 2>/dev/null || echo 'Run: git checkout -b feature/high-level-api'; echo ''; echo 'Agent ready for WS5 tasks (after merge)'; exec bash"
+        }
+    }
+
+    tab name="Coordination" {
+        pane split_direction="vertical" {
+            pane size="70%" {
+                name "Dashboard"
+                command "bash"
+                args "-c" "echo 'Starting MTGJSON coordination dashboard...'; sleep 1; ./coordination/workstream-dashboard.sh 2>/dev/null || (echo 'Dashboard not found. Creating fallback monitoring...'; while true; do clear; echo '=== MTGJSON Parallelization Status ==='; echo ''; echo 'Compilation Errors:'; cargo check 2>&1 | grep -c 'error\\[' | xargs echo '  Current:'; echo '  Target: 0'; echo ''; echo 'Workstream Branches:'; git branch | grep feature/ | sed 's/^/  /'; echo ''; echo 'Recent Commits:'; git log --oneline -5 --all --decorate | sed 's/^/  /'; echo ''; sleep 10; done)"
+            }
+            pane size="30%" split_direction="horizontal" {
+                pane {
+                    name "Error Count"
+                    command "watch"
+                    args "-n" "30" "echo 'MTGJSON Compilation Metrics:'; echo ''; cargo check 2>&1 | grep -c 'error\\[' | xargs echo 'Errors:'; cargo check 2>&1 | grep -c 'warning:' | xargs echo 'Warnings:'; echo ''; echo 'PyO3 Migration Progress:'; rg 'PyList::new\\(' --type rust 2>/dev/null | wc -l | xargs echo '  Old PyList::new:'; rg 'PyList::new_bound\\(' --type rust 2>/dev/null | wc -l | xargs echo '  New PyList::new_bound:'; echo ''; echo 'GitHub Module:'; ls -la src/providers/github/ 2>/dev/null | wc -l | xargs echo '  Files created:'"
+                }
+                pane {
+                    name "Branch Status"
+                    command "watch"
+                    args "-n" "5" "echo 'Active Branches:'; git branch | grep -E 'feature/|finish_patch' | sed 's/^/  /'; echo ''; git status --short | head -10; echo ''; echo 'Current:'; git branch --show-current"
+                }
+            }
+        }
+    }
+
+    tab name="Monitor" {
+        pane split_direction="vertical" {
+            pane size="50%" {
+                name "Compilation Monitor"
+                command "bash"
+                args "-c" "echo 'Monitoring MTGJSON Rust compilation...'; echo 'Target: 0 errors (from 31)'; echo ''; while true; do echo '=== Compilation Check ==='; cargo check 2>&1 | grep -E 'error\\[|error:' | head -15; echo ''; echo 'Error count:' $(cargo check 2>&1 | grep -c 'error\\['); echo 'Timestamp:' $(date '+%H:%M:%S'); echo '---'; sleep 20; done"
+            }
+            pane size="50%" split_direction="horizontal" {
+                pane {
+                    name "File Activity"
+                    command "watch"
+                    args "-n" "5" "echo 'Recently Modified Files:'; find src/ -name '*.rs' -mmin -10 2>/dev/null | head -15"
+                }
+                pane {
+                    name "Key Files"
+                    command "bash"
+                    args "-c" "watch -n 10 \"echo 'Key File Status:'; echo ''; echo 'GitHub Module:'; ls -la src/providers/github/*.rs 2>/dev/null | wc -l | xargs echo '  Files:'; echo ''; echo 'Critical Files:'; ls -la src/builders/parallel_call.rs 2>/dev/null && echo '  ✓ parallel_call.rs' || echo '  ✗ parallel_call.rs'; ls -la src/classes/foreign_data.rs 2>/dev/null && echo '  ✓ foreign_data.rs' || echo '  ✗ foreign_data.rs'; ls -la src/builders/set_builder.rs 2>/dev/null && echo '  ✓ set_builder.rs' || echo '  ✗ set_builder.rs'\""
+                }
+            }
+        }
+    }
+
+    tab name="Commands" {
+        pane {
+            name "MTGJSON Quick Commands"
+            command "bash"
+            args "-c" "cat << 'EOF'
+========================================
+MTGJSON Rust Parallelization Commands
+========================================
+
+SETUP:
+  # Create all workstream branches
+  ./coordination/create-workstream-branches.sh
+
+  # Check out specific workstream
+  git checkout feature/github-module      # WS1
+  git checkout feature/pyo3-migration     # WS2
+  git checkout feature/type-fixes         # WS3
+  git checkout feature/lifetime-fixes     # WS4
+  git checkout feature/high-level-api     # WS5
+
+STATUS:
+  # Check all workstreams
+  ./coordination/sync-status.sh
+
+  # Interactive dashboard
+  ./coordination/workstream-dashboard.sh
+
+  # Check compilation
+  cargo check 2>&1 | grep -c 'error\\['
+
+DEVELOPMENT:
+  # WS1: Create GitHub module
+  mkdir -p src/providers/github
+  touch src/providers/github/{mod,boosters,decks,sealed,card_sealed_products,mtgsqlite}.rs
+
+  # WS2: Fix PyO3 calls
+  rg 'PyList::new\\(' --type rust -l    # Find old API
+  rg 'PyDict::new\\(' --type rust -l
+  rg 'PySet::empty\\(' --type rust -l
+
+  # WS3: Fix method signatures
+  cargo check 2>&1 | grep 'this method takes'
+
+  # WS4: Fix lifetimes
+  cargo check 2>&1 | grep 'lifetime'
+
+TESTING:
+  # Test compilation
+  cargo build
+
+  # Test specific module
+  cargo check --lib
+
+  # Run tests
+  cargo test
+
+MERGE:
+  # When all complete
+  ./coordination/merge-workstreams.sh
+
+  # Manual merge
+  git checkout main
+  git merge feature/github-module
+  git merge feature/pyo3-migration
+  git merge feature/type-fixes
+  git merge feature/lifetime-fixes
+  cargo build  # Should succeed!
+  git merge feature/high-level-api
+
+METRICS:
+  # Count errors
+  cargo check 2>&1 | grep -c 'error\\['
+
+  # Count warnings
+  cargo check 2>&1 | grep -c 'warning:'
+
+  # PyO3 migration progress
+  echo 'Old API calls:' $(rg 'PyList::new\\(' --type rust | wc -l)
+  echo 'New API calls:' $(rg 'PyList::new_bound\\(' --type rust | wc -l)
+
+HELP:
+  # View epic details
+  less EPIC.md
+
+  # View parallelization strategy
+  less ../PARALLELIZATION_STRATEGY.md
+
+  # Coordination tools help
+  less coordination/README.md
+
+EOF
+exec bash"
+        }
+    }
+
+    tab name="Conflicts" {
+        pane {
+            name "Conflict Resolution Guide"
+            command "bash"
+            args "-c" "cat << 'EOF'
+========================================
+Potential Merge Conflicts
+========================================
+
+EXPECTED CONFLICTS:
+
+1. src/builders/parallel_call.rs
+   - Modified by: WS2 (PyO3 updates) & WS3 (Type fixes)
+   - Resolution: Keep both sets of changes
+
+   Example:
+   <<<<<<< HEAD (WS2)
+   let py_list = PyList::new_bound(py, items);  // PyO3 update
+   =======
+   provider.download_all_pages(py, url, params)?;  // Type fix
+   >>>>>>> feature/type-fixes
+
+   KEEP BOTH - they fix different issues
+
+2. src/classes/foreign_data.rs
+   - Modified by: WS2 (PyO3 updates) & WS4 (Lifetime fixes)
+   - Resolution: Keep both sets of changes
+
+   Example:
+   <<<<<<< HEAD (WS2)
+   let dict = PyDict::new_bound(py);  // PyO3 update
+   =======
+   pub fn to_dict<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyDict>> {  // Lifetime fix
+   >>>>>>> feature/lifetime-fixes
+
+   KEEP BOTH - complementary fixes
+
+NO CONFLICTS EXPECTED:
+- WS1 (GitHub module) - All new files
+- WS5 (High-level API) - Only after merge
+
+RESOLUTION STEPS:
+
+1. When conflict occurs:
+   git status                    # See conflicted files
+
+2. Open conflicted file and look for:
+   <<<<<<< HEAD
+   [current branch changes]
+   =======
+   [incoming branch changes]
+   >>>>>>> branch-name
+
+3. For parallel_call.rs and foreign_data.rs:
+   - Remove conflict markers
+   - Keep BOTH sets of changes
+   - They address different issues
+
+4. After resolving:
+   git add [resolved-file]
+   git merge --continue
+
+5. Test compilation:
+   cargo check
+
+PREVENTION:
+
+To minimize conflicts:
+- WS2 developer: Focus on PyO3 API replacements only
+- WS3 developer: Focus on method signatures only
+- WS4 developer: Focus on lifetime annotations only
+- Communicate if touching same file
+
+ABORT IF NEEDED:
+  git merge --abort
+  git checkout main
+  git reset --hard origin/main
+
+EOF
+exec bash"
+        }
+    }
+}
