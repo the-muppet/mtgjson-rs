@@ -88,11 +88,12 @@ pub fn add_provider_classes_to_module(m: &Bound<'_, PyModule>) -> PyResult<()> {
     // Subdirectory providers
     m.add_class::<CardMarketProvider>()?;
     m.add_class::<EdhrecProviderCardRanks>()?;
-    m.add_class::<GitHubBoostersProvider>()?;
-    m.add_class::<GitHubCardSealedProductsProvider>()?;
-    m.add_class::<GitHubDecksProvider>()?;
-    m.add_class::<GitHubMTGSqliteProvider>()?;
-    m.add_class::<GitHubSealedProvider>()?;
+    // GitHub providers are Rust-only (no PyO3 bindings yet)
+    // m.add_class::<GitHubBoostersProvider>()?;
+    // m.add_class::<GitHubCardSealedProductsProvider>()?;
+    // m.add_class::<GitHubDecksProvider>()?;
+    // m.add_class::<GitHubMTGSqliteProvider>()?;
+    // m.add_class::<GitHubSealedProvider>()?;
     m.add_class::<MtgWikiProviderSecretLair>()?;
     m.add_class::<ScryfallProvider>()?;
     m.add_class::<ScryfallProviderOrientationDetector>()?;
