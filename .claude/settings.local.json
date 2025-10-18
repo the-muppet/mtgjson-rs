@@ -3,7 +3,12 @@
     "allow": [
       "Read(//c/Users/rprat/projects/mtgjson-v5/mtgjson5/compiled_classes/**)",
       "Read(//c/Users/rprat/projects/mtgjson-v5/mtgjson5/providers/**)",
-      "Read(//c/Users/rprat/projects/mtgjson-v5/mtgjson5/**)"
+      "Read(//c/Users/rprat/projects/mtgjson-v5/mtgjson5/**)",
+      "Bash(git checkout feature/pyo3)",
+      "Bash(git checkout -b feature/pyo3)",
+      "Bash(git checkout feature/type-fix)",
+      "Bash(cargo build)",
+      "Bash(command grep -A 3 \"foreign_data.rs\")"
     ],
     "deny": [],
     "ask": []

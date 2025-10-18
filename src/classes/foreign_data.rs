@@ -109,9 +109,7 @@ impl MtgjsonForeignDataObject {
     }
 
     pub fn to_dict_bound(&self, py: Python) -> PyResult<Bound<'_, PyDict>> {
-        let result = PyDict::new_bound(py);
-        self.to_dict(py)?;
-        Ok(result)
+        self.to_dict(py)
     }
 
     /// Check if foreign data has meaningful content
@@ -434,5 +432,171 @@ mod tests {
         assert_eq!(foreign_data.face_name, Some("Frente".to_string()));
         assert_eq!(foreign_data.type_, Some("Mágica Instantânea".to_string()));
         assert_eq!(foreign_data.multiverse_id, Some(77777));
+    }
+
+    #[test]
+    fn test_to_dict_basic() {
+        pyo3::prepare_freethreaded_python();
+
+        Python::with_gil(|py| {
+            let mut foreign_data = MtgjsonForeignDataObject::new();
+            foreign_data.language = "Japanese".to_string();
+            foreign_data.name = Some("稲妻".to_string());
+            foreign_data.multiverse_id = Some(12345);
+
+            let dict_result = foreign_data.to_dict(py);
+            assert!(dict_result.is_ok());
+
+            let dict = dict_result.unwrap();
+            assert!(dict.contains("language").unwrap());
+            assert!(dict.contains("name").unwrap());
+            assert!(dict.contains("multiverseId").unwrap());
+            assert!(dict.contains("identifiers").unwrap());
+        });
+    }
+
+    #[test]
+    fn test_to_dict_with_all_fields() {
+        pyo3::prepare_freethreaded_python();
+
+        Python::with_gil(|py| {
+            let mut foreign_data = MtgjsonForeignDataObject::new();
+            foreign_data.language = "French".to_string();
+            foreign_data.name = Some("Éclair".to_string());
+            foreign_data.text = Some("Infligez 3 blessures.".to_string());
+            foreign_data.flavor_text = Some("Rapide!".to_string());
+            foreign_data.face_name = Some("Avant".to_string());
+            foreign_data.type_ = Some("Éphémère".to_string());
+            foreign_data.multiverse_id = Some(54321);
+
+            let dict_result = foreign_data.to_dict(py);
+            assert!(dict_result.is_ok());
+
+            let dict = dict_result.unwrap();
+            assert!(dict.contains("language").unwrap());
+            assert!(dict.contains("name").unwrap());
+            assert!(dict.contains("text").unwrap());
+            assert!(dict.contains("flavorText").unwrap());
+            assert!(dict.contains("faceName").unwrap());
+            assert!(dict.contains("type").unwrap());
+            assert!(dict.contains("multiverseId").unwrap());
+        });
+    }
+
+    #[test]
+    fn test_to_dict_skips_empty_strings() {
+        pyo3::prepare_freethreaded_python();
+
+        Python::with_gil(|py| {
+            let mut foreign_data = MtgjsonForeignDataObject::new();
+            foreign_data.language = "German".to_string();
+            foreign_data.name = Some("".to_string());
+            foreign_data.text = Some("".to_string());
+
+            let dict_result = foreign_data.to_dict(py);
+            assert!(dict_result.is_ok());
+
+            let dict = dict_result.unwrap();
+            assert!(dict.contains("language").unwrap());
+            assert!(!dict.contains("name").unwrap());
+            assert!(!dict.contains("text").unwrap());
+        });
+    }
+
+    #[test]
+    fn test_to_dict_bound() {
+        pyo3::prepare_freethreaded_python();
+
+        Python::with_gil(|py| {
+            let mut foreign_data = MtgjsonForeignDataObject::new();
+            foreign_data.language = "Spanish".to_string();
+            foreign_data.name = Some("Rayo".to_string());
+            foreign_data.multiverse_id = Some(98765);
+
+            let dict_result = foreign_data.to_dict_bound(py);
+            assert!(dict_result.is_ok());
+
+            let dict = dict_result.unwrap();
+            assert!(dict.contains("language").unwrap());
+            assert!(dict.contains("name").unwrap());
+            assert!(dict.contains("multiverseId").unwrap());
+        });
+    }
+
+    #[test]
+    fn test_to_dict_bound_matches_to_dict() {
+        pyo3::prepare_freethreaded_python();
+
+        Python::with_gil(|py| {
+            let mut foreign_data = MtgjsonForeignDataObject::new();
+            foreign_data.language = "Italian".to_string();
+            foreign_data.name = Some("Fulmine".to_string());
+            foreign_data.text = Some("Infliggi 3 danni.".to_string());
+            foreign_data.multiverse_id = Some(11111);
+
+            let dict1 = foreign_data.to_dict(py).unwrap();
+            let dict2 = foreign_data.to_dict_bound(py).unwrap();
+
+            assert_eq!(dict1.len(), dict2.len());
+            assert!(dict2.contains("language").unwrap());
+            assert!(dict2.contains("name").unwrap());
+            assert!(dict2.contains("text").unwrap());
+        });
+    }
+
+    #[test]
+    fn test_to_dict_lifetime_safety() {
+        pyo3::prepare_freethreaded_python();
+
+        Python::with_gil(|py| {
+            let foreign_data = MtgjsonForeignDataObject {
+                language: "Korean".to_string(),
+                name: Some("번개".to_string()),
+                text: Some("피해 3점".to_string()),
+                flavor_text: None,
+                face_name: None,
+                type_: Some("순간마법".to_string()),
+                multiverse_id: Some(99999),
+                identifiers: MtgjsonIdentifiers::new(),
+            };
+
+            let dict = foreign_data.to_dict(py).unwrap();
+
+            assert!(dict.contains("language").unwrap());
+            assert!(dict.contains("name").unwrap());
+            assert!(dict.contains("text").unwrap());
+            assert!(dict.contains("type").unwrap());
+            assert!(!dict.contains("flavorText").unwrap());
+            assert!(!dict.contains("faceName").unwrap());
+        });
+    }
+
+    #[test]
+    fn test_has_content() {
+        let mut foreign_data = MtgjsonForeignDataObject::new();
+        assert!(!foreign_data.has_content());
+
+        foreign_data.name = Some("Test".to_string());
+        assert!(foreign_data.has_content());
+
+        foreign_data.name = None;
+        foreign_data.text = Some("Text".to_string());
+        assert!(foreign_data.has_content());
+
+        foreign_data.text = None;
+        foreign_data.flavor_text = Some("Flavor".to_string());
+        assert!(foreign_data.has_content());
+    }
+
+    #[test]
+    fn test_get_display_name() {
+        let mut foreign_data = MtgjsonForeignDataObject::new();
+        assert_eq!(foreign_data.get_display_name(), None);
+
+        foreign_data.name = Some("Card Name".to_string());
+        assert_eq!(foreign_data.get_display_name(), Some("Card Name".to_string()));
+
+        foreign_data.face_name = Some("Face Name".to_string());
+        assert_eq!(foreign_data.get_display_name(), Some("Face Name".to_string()));
     }
 }

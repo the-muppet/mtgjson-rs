@@ -112,9 +112,9 @@ impl WhatsInStandardProvider {
     pub fn new() -> PyResult<Self> {
         let headers = HashMap::new();
         let set_codes = Python::with_gil(|py| {
-            PySet::empty(py)
+            PySet::new_bound(py, &[])
                 .map(|py_set| py_set.into_py(py))
-                .unwrap_or_else(|_| PySet::empty(py).unwrap().into_py(py))
+                .unwrap_or_else(|_| PySet::new_bound(py, &[]).unwrap().into_py(py))
         });
         let base = BaseProvider::new("standard".to_string(), headers);
         Ok(Self { base, set_codes })
@@ -131,7 +131,7 @@ impl WhatsInStandardProvider {
             })?;
 
             if let Some(cached_sets) = cache.get() {
-                let py_set = pyo3::types::PySet::empty(py)?;
+                let py_set = pyo3::types::PySet::new_bound(py, &[])?;
                 for set_code in cached_sets.iter() {
                     py_set.add(set_code)?;
                 }
@@ -169,7 +169,7 @@ impl WhatsInStandardProvider {
         }
 
         Python::with_gil(|py| {
-            let py_set = PySet::empty(py)?;
+            let py_set = PySet::new_bound(py, &[])?;
             for set_code in sets.iter() {
                 py_set.add(set_code)?;
             }
@@ -208,7 +208,7 @@ impl WhatsInStandardProvider {
         })?;
 
         Python::with_gil(|py| {
-            let stats_dict = PyDict::new(py);
+            let stats_dict = PyDict::new_bound(py);
             stats_dict.set_item("set_count", cache.sets.len())?;
             stats_dict.set_item("is_valid", cache.is_valid())?;
             stats_dict.set_item("age_seconds", cache.last_updated.elapsed().as_secs())?;
