@@ -7,8 +7,8 @@ use super::{AbstractProvider, BaseProvider, MtgjsonConfig, ProviderError, Result
 
 pub struct GitHubSealedProvider {
     provider: Arc<BaseProvider>,
-    sealed_products: OnceCell<HashMap<String, HashMap<String, Value>>>,
-    sealed_contents: OnceCell<HashMap<String, HashMap<String, Value>>>,
+    sealed_products: OnceCell<HashMap<String, Map<String, Value>>>,
+    sealed_contents: OnceCell<HashMap<String, Map<String, Value>>>,
 }
 
 impl GitHubSealedProvider {
@@ -29,7 +29,7 @@ impl GitHubSealedProvider {
         if self.sealed_products.get().is_none() {
             let products = self.provider.download(Self::SEALED_PRODUCTS_URL).await?;
             if let Value::Object(products_map) = products {
-                let products_hash: HashMap<String, HashMap<String, Value>> = products_map
+                let products_hash: HashMap<String, Map<String, Value>> = products_map
                     .into_iter()
                     .filter_map(|(k, v)| {
                         if let Value::Object(inner) = v {
@@ -48,7 +48,7 @@ impl GitHubSealedProvider {
         if self.sealed_contents.get().is_none() {
             let contents = self.provider.download(Self::SEALED_CONTENTS_URL).await?;
             if let Value::Object(contents_map) = contents {
-                let contents_hash: HashMap<String, HashMap<String, Value>> = contents_map
+                let contents_hash: HashMap<String, Map<String, Value>> = contents_map
                     .into_iter()
                     .filter_map(|(k, v)| {
                         if let Value::Object(inner) = v {
