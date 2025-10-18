@@ -59,11 +59,11 @@ create_branch() {
 }
 
 echo "This script will create the following workstream branches:"
-echo "  - feature/github-module (WS1: GitHub providers)"
-echo "  - feature/pyo3-migration (WS2: PyO3 v0.22 updates)"
-echo "  - feature/type-fixes (WS3: Type signature fixes)"
-echo "  - feature/lifetime-fixes (WS4: Lifetime fixes)"
-echo "  - feature/high-level-api (WS5: Python API functions)"
+echo "  - feature/github (WS1: GitHub providers)"
+echo "  - feature/pyo3 (WS2: PyO3 v0.22 updates)"
+echo "  - feature/type-fix (WS3: Type signature fixes)"
+echo "  - feature/life-fix (WS4: Lifetime fixes)"
+echo "  - feature/api-cli (WS5: Python API functions)"
 echo ""
 read -p "Continue? (y/n) " -n 1 -r
 echo ""
@@ -79,27 +79,27 @@ echo "=== Creating Workstream Branches ==="
 echo ""
 
 # WS1: GitHub Module
-create_branch "feature/github-module" \
+create_branch "feature/gh" \
     "WS1: GitHub Module Implementation" \
     ""
 
 # WS2: PyO3 Migration
-create_branch "feature/pyo3-migration" \
+create_branch "feature/pyo3" \
     "WS2: PyO3 API Migration to v0.22" \
     ""
 
 # WS3: Type Fixes
-create_branch "feature/type-fixes" \
+create_branch "feature/type-fix" \
     "WS3: Type & Method Signature Fixes" \
     ""
 
 # WS4: Lifetime Fixes
-create_branch "feature/lifetime-fixes" \
+create_branch "feature/life-fix" \
     "WS4: Lifetime & Memory Safety Fixes" \
     ""
 
 # WS5: High-Level API (created but work starts after merge)
-create_branch "feature/high-level-api" \
+create_branch "feature/api-cli" \
     "WS5: High-Level Python API Implementation" \
     ""
 
@@ -142,3 +142,4 @@ echo ""
 # Return to original branch
 echo -e "Returning to ${BLUE}$ORIGINAL_BRANCH${NC}"
 git checkout $ORIGINAL_BRANCH --quiet
+

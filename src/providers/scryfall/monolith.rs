@@ -63,8 +63,8 @@ impl ScryfallProvider {
         let cards = runtime
             .block_on(async { self.download_all_pages_async(starting_url, params).await })?;
 
-        let py_list = PyList::new(py, cards.iter().map(|v| v.to_string()).collect::<Vec<_>>());
-        Ok(py_list.into_py(py))
+        let py_list = PyList::new_bound(py, cards.iter().map(|v| v.to_string()).collect::<Vec<_>>());
+        Ok(py_list)
     }
 
     /// Download cards for a specific set

@@ -669,9 +669,14 @@ impl MtgjsonCardObject {
             locals.set_item("self_side", &self.side)?;
             locals.set_item("other_number", &other.number)?;
             locals.set_item("other_side", &other.side)?;
-            let code_cstr = CString::new().unwrap();
-            py.run(code_cstr.as_c_str(), None, Some(&locals))?;
-            let result: bool = locals.get_item("result")?.unwrap().extract()?;
+
+            // Execute Python code and get result
+            let module = PyModule::from_code_bound(py, python_code, "", "")?;
+            let globals = module.dict();
+            globals.update(locals.as_any())?;
+
+            let card_lt = module.getattr("card_lt")?;
+            let result: bool = card_lt.call1((&self.number, &self.side, &other.number, &other.side))?.extract()?;
             Ok(result)
         })
     }

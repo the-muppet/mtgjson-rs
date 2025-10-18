@@ -467,7 +467,7 @@ impl CardMarketProvider {
 
         // Convert PyObject back to serde_json::Value for processing
         let json_str = Python::with_gil(|py| {
-            let json_module: Bound<'_, PyModule> = pyo3::types::PyModule::import(py, "json")?;
+            let json_module: Bound<'_, PyModule> = pyo3::types::PyModule::import_bound(py, "json")?;
             json_module
                 .call_method1("dumps", (data,))?
                 .extract::<String>()
@@ -528,7 +528,7 @@ impl CardMarketProvider {
                     // Convert PyObject back to serde_json::Value for processing
                     let json_str = Python::with_gil(|py| {
                         let json_module: Bound<'_, PyModule> =
-                            pyo3::types::PyModule::import(py, "json")?;
+                            pyo3::types::PyModule::import_bound(py, "json")?;
                         json_module
                             .call_method1("dumps", (response,))?
                             .extract::<String>()

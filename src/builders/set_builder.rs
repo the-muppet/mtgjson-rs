@@ -169,7 +169,7 @@ pub async fn parse_foreign_async(
     let provider = ScryfallProvider::new()?;
     let prints_api_json: Vec<serde_json::Value> =
         Python::with_gil(|py| -> PyResult<Vec<serde_json::Value>> {
-            let pages = provider.download_all_pages()?;
+            let pages = provider.download_all_pages(py, &modified_url, None)?;
             let mut json_values = Vec::new();
             for page in pages {
                 let json_str = page.to_string();
@@ -1519,7 +1519,7 @@ pub async fn build_base_mtgjson_cards(
         // Download cards using the provider (sync, via Python GIL)
         let scryfall_cards: Vec<serde_json::Value> =
             Python::with_gil(|py| -> PyResult<Vec<serde_json::Value>> {
-                let py_cards = provider.download_cards()?;
+                let py_cards = provider.download_cards(py, set_code)?;
                 let mut result = Vec::new();
                 for card_py in py_cards.iter() {
                     let card_json_str: String = card_py.extract()?;
